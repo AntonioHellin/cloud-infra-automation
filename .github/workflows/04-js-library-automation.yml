@@ -1,0 +1,64 @@
+# GitHub Actions Example 4: Simple JavaScript Library Automation
+# This demonstrates a basic CI/CD pipeline for a JavaScript library
+
+name: 04 - Simple JS Library Automation
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  main:
+    runs-on: ubuntu-latest    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          repository: xavidop/npm-package-template
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: |
+          echo "Installing dependencies..."
+          npm install
+          echo "✅ Dependencies installed!"
+
+      - name: Build Library
+        run: |
+          echo "Building library with Rollup..."
+          echo "Creating ES modules bundle..."
+          echo "Creating CommonJS bundle..."
+          npm run build
+          echo "✅ Build completed!"
+      
+      - name: Run Tests
+        run: |
+          echo "Running tests..."
+          echo "Testing SuperTool class..."
+          echo "Testing utils functions..."
+          npm run test
+          echo "✅ All tests passed!"
+      
+      - name: Check Code Quality
+        run: |
+          echo "Checking code style..."
+          npm run lint
+          echo "✅ Code quality check passed!"
+
+
+      - name: Publish to NPM
+        run: |
+          echo "Publishing to NPM..."
+          echo "Package: github-actions-example-lib"
+          npm publish --dry-run
+          echo "✅ Published to NPM!"
+        # Note: In real usage, you'd need:
+        # env:
+        #   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
