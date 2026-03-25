@@ -4,10 +4,42 @@ This module contains comprehensive GitHub Actions examples designed for teaching
 
 ## 📋 Table of Contents
 
-1. [Hello World](#1-hello-world)
-2. [Parallelism and Sequencing](#2-parallelism-and-sequencing)
-3. [Conditionals](#3-conditionals)
-4. [JavaScript Library Automation](#4-javascript-library-automation)
+1. [Prerequisites](#-prerequisites)
+2. [Getting Started](#-getting-started)
+3. [Hello World](#1-hello-world)
+4. [Parallelism and Sequencing](#2-parallelism-and-sequencing)
+5. [Conditionals](#3-conditionals)
+6. [JavaScript Library Automation](#4-javascript-library-automation)
+
+## ✅ Prerequisites
+
+Before working with this module, make sure you have:
+
+- A [GitHub](https://github.com) account
+- Git installed and configured locally
+- A GitHub **Personal Access Token (PAT)** with `repo` and `workflow` scopes
+
+> **Note:** Pushing files under `.github/workflows/` requires the `workflow` scope. Standard OAuth tokens (e.g. VS Code's built-in Git auth) will be rejected. Generate a PAT at **GitHub > Settings > Developer settings > Personal access tokens > Tokens (classic)** and update your remote:
+> ```bash
+> git remote set-url origin https://<YOUR_TOKEN>@github.com/<your-username>/<your-repo>.git
+> ```
+
+---
+
+## 🚀 Getting Started
+
+```bash
+# Clone the repository
+git clone https://github.com/AntonioHellin/infra_and_cloud_bigschool.git
+cd infra_and_cloud_bigschool
+
+# Explore the workflows
+ls .github/workflows/
+```
+
+Workflows trigger automatically on `push` or `pull_request` to `main`, or manually via **Actions > Run workflow** in the GitHub UI.
+
+---
 
 ## 🎯 Learning Objectives
 
