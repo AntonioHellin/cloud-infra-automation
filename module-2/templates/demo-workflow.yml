@@ -1,0 +1,51 @@
+name: Demo Workflow
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  demo:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Print repository information
+      run: |
+        echo "🎉 This is a demo workflow created by Terraform!"
+        echo "📦 Repository: ${{ github.repository }}"
+        echo "🌿 Branch: ${{ github.ref_name }}"
+        echo "👤 Actor: ${{ github.actor }}"
+        echo "🔗 Event: ${{ github.event_name }}"
+        
+    - name: List repository contents
+      run: |
+        echo "📁 Repository contents:"
+        ls -la
+        
+    - name: Show environment info
+      run: |
+        echo "🖥️ Runner OS: ${{ runner.os }}"
+        echo "🏗️ Workflow: ${{ github.workflow }}"
+        echo "📋 Job: ${{ github.job }}"
+        
+    - name: Terraform validation (if Terraform files exist)
+      run: |
+        if [ -f "main.tf" ]; then
+          echo "🔍 Found Terraform files, validating..."
+          # Note: In a real scenario, you'd install Terraform first
+          echo "terraform fmt -check"
+          echo "terraform validate"
+        else
+          echo "ℹ️ No Terraform files found in this repository"
+        fi
+        
+    - name: Success message
+      run: |
+        echo "✅ Demo workflow completed successfully!"
+        echo "🚀 This repository was created and managed by Terraform"
+        echo "📚 Learn more about Infrastructure as Code with Terraform"
