@@ -1,116 +1,135 @@
-# Module 1: GitHub Actions Examples
+# cloud-infra-automation
 
-This module contains comprehensive GitHub Actions examples designed for teaching AI/DevOps concepts. Each workflow demonstrates key concepts with real-world scenarios.
-
-## 📋 Table of Contents
-
-1. [Prerequisites](#-prerequisites)
-2. [Getting Started](#-getting-started)
-3. [Hello World](#1-hello-world)
-4. [Parallelism and Sequencing](#2-parallelism-and-sequencing)
-5. [Conditionals](#3-conditionals)
-6. [JavaScript Library Automation](#4-javascript-library-automation)
-
-## ✅ Prerequisites
-
-Before working with this module, make sure you have:
-
-- A [GitHub](https://github.com) account
-- Git installed and configured locally
-- A GitHub **Personal Access Token (PAT)** with `repo` and `workflow` scopes
-
-> **Note:** Pushing files under `.github/workflows/` requires the `workflow` scope. Standard OAuth tokens (e.g. VS Code's built-in Git auth) will be rejected. Generate a PAT at **GitHub > Settings > Developer settings > Personal access tokens > Tokens (classic)** and update your remote:
-> ```bash
-> git remote set-url origin https://<YOUR_TOKEN>@github.com/<your-username>/<your-repo>.git
-> ```
+A hands-on engineering repository demonstrating modern Cloud Infrastructure as Code (IaC) and CI/CD automation using GitHub Actions and Terraform.
 
 ---
 
-## 🚀 Getting Started
+## Project Overview
+
+`cloud-infra-automation` provides modular, practical examples for designing automated CI/CD pipelines and managing cloud resources declaratively. The repository contains two distinct learning and operational modules:
+
+- **Module 1 (`.github/workflows/`)**: Progressive GitHub Actions workflows demonstrating automation fundamentals, matrix strategies, parallel/sequential job dependencies, conditional routing, and automated publishing.
+- **Module 2 (`module-2/`)**: Terraform configuration managing GitHub repositories as code, including automated repository creation, branch protection policies, workflow provisioning, and metadata management.
+
+---
+
+## Features
+
+- **Progressive GitHub Actions Workflows**:
+  - `01-hello-world.yml`: Workflow triggers, context variables, outputs, and basic runners.
+  - `02-parallelism-sequencing.yml`: DAG job dependencies (`needs`), parallel execution, and artifact passing.
+  - `03-conditionals.yml`: Complex step/job condition logic, branch-sensitive execution, and input flags.
+  - `04-js-library-automation.yml`: End-to-end continuous integration and delivery lifecycle (install, test, build, conditional release).
+- **Declarative Infrastructure with Terraform**:
+  - Automated GitHub repository lifecycle management via `integrations/github` provider.
+  - Enforced branch protection rules and mandatory PR reviews.
+  - Programmatic creation of `.github/workflows` and templated documentation (`README.md.tpl`).
+
+---
+
+## Prerequisites
+
+- **Git**: Configured locally with authenticated GitHub credentials.
+- **Terraform**: Version `>= 1.0` (for Module 2).
+- **GitHub Personal Access Token (PAT)**:
+  - Classic Token with `repo` and `workflow` scopes, or a fine-grained token with Repository Administration and Workflow permissions.
+  - Store token securely in your environment as `GITHUB_TOKEN`.
+
+---
+
+## Security Best Practices
+
+> [!CAUTION]
+> **Never embed authentication tokens directly into Git remote URLs** (e.g., `https://<TOKEN>@github.com/...`). Embedding secrets into URLs causes credentials to be written to `.git/config` in plaintext and risks leakage through process tables or system logs.
+
+### Recommended Git Authentication
+
+Use either **SSH keys** or the **Git Credential Manager**:
 
 ```bash
-# Clone the repository
-git clone https://github.com/AntonioHellin/infra_and_cloud_bigschool.git
-cd infra_and_cloud_bigschool
+# Option A: SSH (Recommended)
+git remote set-url origin git@github.com:AntonioHellin/infra_and_cloud_bigschool.git
 
-# Explore the workflows
-ls .github/workflows/
+# Option B: Git Credential Manager (HTTPS)
+git credential-manager configure
 ```
 
-Workflows trigger automatically on `push` or `pull_request` to `main`, or manually via **Actions > Run workflow** in the GitHub UI.
+For automated scripts, export credentials as environment variables rather than embedding them into scripts:
+
+```bash
+export GITHUB_TOKEN="ghp_yourSecureTokenHere"
+```
 
 ---
 
-## 🎯 Learning Objectives
+## Module 1: GitHub Actions CI/CD
 
-By studying these examples, students will understand:
+Workflows are located in `.github/workflows/` and can be triggered on push or manually via GitHub Actions dispatch.
 
-- Basic GitHub Actions syntax and structure
-- Job dependencies and execution order
-- Parallel vs sequential job execution
-- Conditional logic and branching strategies
-- Real-world CI/CD automation patterns
-- Security considerations and best practices
+```bash
+# Inspect available workflows
+ls -la .github/workflows/
+```
 
----
+### Workflow Catalog
 
-## 1. Hello World
-
-**File**: `.github/workflows/01-hello-world.yml`
-
-### 📖 Concepts Demonstrated
-
-- **Basic workflow structure**: name, triggers (on), jobs, steps
-- **Runners**: Using `ubuntu-latest` as the execution environment
-- **Simple commands**: `echo`, `date`, multi-line scripts
-- **GitHub context variables**: `$RUNNER_OS`, `$GITHUB_ACTOR`, etc.
-- **Triggers**: push, pull_request, workflow_dispatch
-- **outputs**: Passing data between jobs using `$GITHUB_OUTPUT`
-- **Reusable actions**: Defining common patterns for reuse
-
+1. **`01-hello-world.yml`**: Baseline workflow illustrating syntax, variables (`$GITHUB_ACTOR`, `$RUNNER_OS`), and job steps.
+2. **`02-parallelism-sequencing.yml`**: Multi-job orchestration showing parallel runs, matrix builds, and inter-job output passing.
+3. **`03-conditionals.yml`**: Branch filtering and conditional execution expressions (`if: github.ref == 'refs/heads/main'`).
+4. **`04-js-library-automation.yml`**: Simulated JavaScript package release pipeline with build, test, and release gates.
 
 ---
 
-## 2. Parallelism and Sequencing
+## Module 2: Terraform Infrastructure as Code
 
-**File**: `.github/workflows/02-parallelism-sequencing.yml`
+Module 2 provisions and governs GitHub repositories declaratively.
 
-### 📖 Concepts Demonstrated
+### Directory Structure
 
-- **Job dependencies**: Using `needs` keyword
-- **Parallel execution**: Jobs running simultaneously
-- **Sequential execution**: Jobs waiting for dependencies
-- **Matrix strategies**: Running jobs across multiple configurations
-- **Job outputs**: Passing data between jobs
-- **Artifact handling**: Sharing data between jobs
+```
+module-2/
+├── main.tf                    # Core resource definitions (repo, files, branch protection)
+├── variables.tf               # Input variable specifications
+├── outputs.tf                 # Output attribute definitions
+├── terraform.tfvars.example   # Variable template (rename to terraform.tfvars)
+└── templates/
+    ├── README.md.tpl          # Templated README for provisioned repositories
+    └── demo-workflow.yml      # Templated workflow deployed by Terraform
+```
+
+### Execution Steps
+
+1. Navigate to the module directory:
+   ```bash
+   cd module-2
+   ```
+
+2. Copy the example variables file and adjust parameters:
+   ```bash
+   cp terraform.tfvars.example terraform.tfvars
+   ```
+
+3. Export your GitHub token:
+   ```bash
+   export GITHUB_TOKEN="ghp_your_token_here"
+   # On Windows PowerShell:
+   # $env:GITHUB_TOKEN="ghp_your_token_here"
+   ```
+
+4. Initialize and apply Terraform:
+   ```bash
+   terraform init
+   terraform plan
+   terraform apply
+   ```
+
+5. When finished, decommission resources safely:
+   ```bash
+   terraform destroy
+   ```
+
 ---
 
-## 3. Conditionals
+## License
 
-**File**: `.github/workflows/03-conditionals.yml`
-
-### 📖 Concepts Demonstrated
-
-- **Basic if statements**: Simple conditional logic
-- **Job-level conditions**: Running entire jobs conditionally
-- **Step-level conditions**: Running individual steps conditionally
-- **Branch detection**: Different behavior for main vs other branches
-- **Manual inputs**: Boolean flags to control workflow behavior
-- **Always conditions**: Steps that run regardless of failures
-
----
-
-## 4. JavaScript Library Automation
-
-**File**: `.github/workflows/04-js-library-automation.yml`
-
-### 📖 Concepts Demonstrated
-
-- **Simple CI/CD pipeline** for JavaScript projects
-- **Sequential job dependencies** (install → test → build → publish)
-- **Conditional publishing** (only when requested or on tags)
-- **Basic Node.js setup** and dependency management
-- **Build verification** and testing
-- **Publication workflow** with proper gating
-
----
+This project is licensed under the MIT License. See [LICENSE](LICENSE) for details if applicable.

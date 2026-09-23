@@ -1,0 +1,39 @@
+# Terraform local and cache files
+**/.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Terraform variable definition files containing secrets
+*.tfvars
+*.tfvars.json
+!*.tfvars.example
+
+# CLI and binary files
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Environment variables & secrets
+.env
+.env.*
+!.env.example
+*.env
+secrets.json
+
+# Operating System files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# IDE & Editor settings
+.vscode/
+.idea/
+*.swp
+*.swo
