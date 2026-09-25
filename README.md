@@ -48,7 +48,7 @@ Use either **SSH keys** or the **Git Credential Manager**:
 
 ```bash
 # Option A: SSH (Recommended)
-git remote set-url origin git@github.com:AntonioHellin/infra_and_cloud_bigschool.git
+git remote set-url origin git@github.com:AntonioHellin/cloud-infra-automation.git
 
 # Option B: Git Credential Manager (HTTPS)
 git credential-manager configure
